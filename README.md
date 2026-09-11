@@ -37,6 +37,30 @@ Skills load on the next session. `claude plugin details agent-communication-guid
 
 `impeccable` is referenced by the router but **not bundled**: its reference material and scripts run to about 3.2 MB across 107 JavaScript modules. Install it from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) if you want it.
 
+### If marketplaces are blocked by policy
+
+Managed installs can disable external marketplaces. The symptom is:
+
+```
+✘ Failed to add marketplace: 'github:jssechoi/agent-communication-guidelines' (github.com)
+  is blocked by enterprise policy. No external marketplaces are allowed.
+```
+
+That is a client-side allowlist (`strictKnownMarketplaces` in org-managed settings), not a problem with this repository. Local directory sources are refused the same way, and `claude plugin install` only reads from marketplaces, so neither is a way around it. Two routes work:
+
+- **Drop the repository into the skills directory.** A directory under `~/.claude/skills/` that contains `.claude-plugin/plugin.json` loads on the next session as `agent-communication-guidelines@skills-dir`, with no marketplace involved.
+
+  ```bash
+  git clone https://github.com/jssechoi/agent-communication-guidelines.git \
+    ~/.claude/skills/agent-communication-guidelines
+  ```
+
+  Check for name collisions first. If you already keep `humanizer`, `newsroom-style`, `humanize-ko`, `voice-en` or `design-taste-frontend` as standalone skills in `~/.claude/skills/`, remove those copies or the bundled ones will shadow them.
+
+- **Copy only the skills you want.** Every directory under `skills/` is self-contained. `skills/agent-tone/` and `skills/style-router/` are enough for the standard on its own.
+
+If you want the normal install path, ask your administrator to add this repository to the marketplace allowlist.
+
 ---
 
 ## Use without Claude Code
