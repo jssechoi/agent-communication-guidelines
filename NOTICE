@@ -1,0 +1,43 @@
+agent-communication-guidelines
+Copyright (c) 2026 jssechoi
+MIT License. See LICENSE.
+
+Content authored by jssechoi:
+
+  GUIDELINES.md, templates/, examples/document_revision_ko.md,
+  skills/agent-tone/, skills/style-router/, skills/humanize-ko/,
+  skills/voice-en/, and the plugin manifests under .claude-plugin/.
+
+================================================================================
+BUNDLED THIRD-PARTY SKILLS
+================================================================================
+
+The directories below are redistributed under their own licenses, all MIT. Each
+carries its upstream LICENSE file and a SOURCE.md recording provenance. They are
+copies of upstream material and are not edited by this project; see each
+SOURCE.md for what was and was not recorded at copy time.
+
+MIT requires these copyright notices to travel with any copy or substantial
+portion of the work. Keep this file and the per-directory LICENSE files together
+when you redistribute.
+
+skills/humanizer/
+  Copyright (c) 2025 Siqi Chen
+  MIT License (see skills/humanizer/LICENSE)
+  Source: https://github.com/blader/humanizer
+
+skills/newsroom-style/
+  Copyright (c) 2025 Joe Amditis
+  MIT License (see skills/newsroom-style/LICENSE)
+  Source: https://github.com/jamditis/claude-skills-journalism
+  Upstream path: journalism-core/skills/newsroom-style/SKILL.md
+
+skills/design-taste-frontend/
+  Copyright (c) 2026 Leonxlnx
+  MIT License (see skills/design-taste-frontend/LICENSE)
+  Source: https://github.com/leonxlnx/taste-skill
+  Upstream name: taste-skill
+
+No other third-party material is redistributed here. skills/style-router/SKILL.md
+names other tools as optional companions; naming and linking them carries no
+license obligation for this repository.

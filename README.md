@@ -6,21 +6,42 @@ Whenever you work with an AI agent in a different repository or project, you can
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
-- **`GUIDELINES.md`**: The core technical and stylistic standard. Contains the "Persona", "Banned AI-isms", "Sentence Ending Patterns", "Document Architecture", and "Document Artifact Rules" (§6, for forms/reports rather than conversational replies).
+- **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
+  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, and the document-artifact rules (§6) for forms and reports.
+  - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
+  - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
+  - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
+- **`GUIDELINES.md`**: Pointer to `skills/agent-tone/SKILL.md` plus a section index. The rules are kept in one file only.
 - **`templates/`**: Actionable templates that agents can copy and fill in.
   - `templates/qa_response.md`: Structure for answering complex technical questions.
   - `templates/strategic_suggestion.md`: Layout for proposing proactive, high-value consulting insights.
 - **`examples/`**: Real-world examples showcasing the rules in action.
-  - `examples/golden_sample.md`: The original reference support email (Korean & English) from a premium LLM Provider to an Enterprise Client.
-  - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for the rules in GUIDELINES.md §2.1, §2.2 and §6.
+  - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the §4 single-language rule, so its greeting and paired English section are **not** to be imitated.
+  - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §2.1, §2.2 and §6.
+- **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
 
 ---
 
-## 🚀 How to Use this Repository
+## Install as a Claude Code plugin
 
-To instruct any AI agent to use this standard, add the following prompt snippet to its instruction file (e.g., `GEMINI.md`, `AGENT.md`, or the system prompt):
+```bash
+claude plugin marketplace add jssechoi/agent-communication-guidelines
+claude plugin install agent-communication-guidelines@jssechoi-skills
+```
+
+Skills load on the next session. `claude plugin details agent-communication-guidelines` reports the projected token cost.
+
+**Installing is not enough to make the standard always-on.** Skills load when their description matches or when they are called by name. Tone has to apply to every deliverable, so add the mandate below to your instruction file. `skills/style-router/SKILL.md` §4 has the same snippet.
+
+`impeccable` is referenced by the router but **not bundled**: its reference material and scripts run to about 3.2 MB across 107 JavaScript modules. Install it from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) if you want it.
+
+---
+
+## Use without Claude Code
+
+To instruct any AI agent to use this standard, add the following prompt snippet to its instruction file (e.g., `GEMINI.md`, `AGENT.md`, `CLAUDE.md`, or the system prompt):
 
 ```markdown
 # Communication Style Mandate
@@ -39,5 +60,24 @@ Specifically, prioritize:
 
 ---
 
-## ✍️ Authors & Maintainers
-- Developed & Maintained by: **jssechoi** (jane.doe@client-corp.com)
+## License
+
+This repository is licensed under the **MIT License**. See `LICENSE`.
+
+Copyright notices for the bundled third-party skills are collected in `NOTICE`. MIT requires the notice to travel with any copy or substantial portion, so keep that file with the rest when you redistribute.
+
+The bundled skills keep their own licenses:
+
+| Directory | License | Copyright | Upstream |
+| :--- | :--- | :--- | :--- |
+| `skills/humanizer/` | MIT | 2025 Siqi Chen | [blader/humanizer](https://github.com/blader/humanizer) |
+| `skills/newsroom-style/` | MIT | 2025 Joe Amditis | [jamditis/claude-skills-journalism](https://github.com/jamditis/claude-skills-journalism) |
+| `skills/design-taste-frontend/` | MIT | 2026 Leonxlnx | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) |
+
+They are copies of upstream material and are not edited here. Rules this project adds go into `skills/agent-tone/` for Korean or `skills/voice-en/` for English. Each directory's `SOURCE.md` records provenance and what was not recorded at copy time.
+
+---
+
+## Authors & Maintainers
+
+- Developed and maintained by **jssechoi** ([github.com/jssechoi](https://github.com/jssechoi))

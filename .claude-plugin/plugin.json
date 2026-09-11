@@ -1,0 +1,20 @@
+{
+  "name": "agent-communication-guidelines",
+  "description": "Korean-first writing standard for AI agents. Strips Korean AI-isms and translationese, answers conclusion-first in a single language with no email greetings, and applies a separate rule set to forms, reports and submission documents. Bundles humanizer, newsroom-style and design-taste-frontend behind a router skill that defines precedence.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jssechoi"
+  },
+  "homepage": "https://github.com/jssechoi/agent-communication-guidelines",
+  "repository": "https://github.com/jssechoi/agent-communication-guidelines",
+  "license": "MIT",
+  "keywords": [
+    "korean",
+    "tone",
+    "writing",
+    "style-guide",
+    "humanize",
+    "ap-style",
+    "document-review"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "jssechoi-skills",
+  "description": "Writing and tone standards for AI agents, Korean-first, with the prose and frontend skills they depend on.",
+  "owner": {
+    "name": "jssechoi"
+  },
+  "plugins": [
+    {
+      "name": "agent-communication-guidelines",
+      "description": "Korean-first writing standard for AI agents. Strips Korean AI-isms and translationese, answers conclusion-first in a single language with no email greetings, and applies a separate rule set to forms, reports and submission documents.",
+      "author": {
+        "name": "jssechoi"
+      },
+      "category": "productivity",
+      "source": "./",
+      "homepage": "https://github.com/jssechoi/agent-communication-guidelines"
+    }
+  ]
+}
