@@ -12,17 +12,19 @@ description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 �
 
 1. **`agent-tone` 이 1순위입니다.** 다른 스킬과 충돌하면 `agent-tone` 을 따릅니다. 단일 언어,
    인사말 배제, 금지 표현, 문장 종결 패턴이 여기서 나옵니다.
-2. **`humanizer` 는 산문이면 예외 없이 적용합니다.** 분량이 늘지 않습니다.
+2. **`humanizer` 는 영문 산문에만 적용합니다.** 패턴이 영어 문법과 철자 기준이라 국문에는 절반이
+   헛돕니다. 로드 비용은 13k 토큰입니다. 국문에도 걸리던 여섯 항목은 `humanize-ko` 7~12번으로
+   옮겼으므로 국문 산문에 `humanizer` 를 부르지 않습니다.
 3. **국문 산문이면 `humanize-ko`, 영문 산문이면 `voice-en` 을 함께 적용합니다.** 서로 바꿔 쓰지
-   않습니다. `humanizer` 가 잡는 패턴은 영어 기준이라 국문에는 절반만 걸립니다.
+   않습니다.
 4. **영문 뉴스체·헤드라인·카피 정리에는 `newsroom-style` 을 얹습니다.** 기계적 AP 규칙(숫자,
    날짜, 직함, 인용 부착 위치, 헤드라인)이 충돌하면 `newsroom-style` 이 이깁니다. 어조와 페르소나는
    `agent-tone` 이 이깁니다.
 5. **프런트엔드 산출물에는 `design-taste-frontend` 를 적용합니다.** `impeccable` 은 이 저장소에
    동봉되지 않았습니다(5절 참조).
 
-**겹치는 항목은 한 번만 손봅니다.** 셋씩 묶기, 굵게 처리 남용, 이모지는 `humanizer` 와
-`humanize-ko` 가 함께 지적합니다. 두 스킬이 같은 문장을 두 번 고치면 문장이 망가집니다.
+**겹치는 항목은 한 번만 손봅니다.** `humanizer` 와 `humanize-ko` 는 이제 같은 글에 함께 걸리지
+않습니다. 셋씩 묶기, 굵게 처리 남용, 이모지는 국문에서는 `humanize-ko` 5·6번이 맡습니다.
 
 ## 2. 산출물 계열별 적용 범위 (Scope)
 
@@ -31,7 +33,7 @@ description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 �
 | 대화형 답변, 채팅, 코드 주석, 커밋 메시지, 리뷰 코멘트 | `agent-tone` §1·§2·§2.1·§2.2·§3 | §4 문서 골격, §6 |
 | 수신자가 있는 글(회신, 요청서, 전달본, 검토 결과) | `agent-tone` 전체. §4 골격을 그대로 씀 | 인사말과 종결 인사말은 §4 가 이미 금지 |
 | 서식 문서, 제출 문서, 보고서 | `agent-tone` §6 이 산문 교정 기준보다 우선 | `humanize-ko` 의 짧은 문장·목록 축소·리듬 변주 |
-| 국문 산문(기사, 안내문, 브리핑) | `humanizer` + `humanize-ko` + `agent-tone` | `voice-en`, `newsroom-style` |
+| 국문 산문(기사, 안내문, 브리핑) | `humanize-ko` + `agent-tone` | `humanizer`, `voice-en`, `newsroom-style` |
 | 영문 산문 | `humanizer` + `voice-en` (+ 뉴스체면 `newsroom-style`) | `humanize-ko` |
 | 자료·안내 문서(기준서, 명세, README, 운영 원칙) | `agent-tone`. 값과 지시가 본문이므로 문체 프로필을 걸지 않음 | 보도체·뉴스체 프로필, `newsroom-style` |
 | 프런트엔드 화면, 단일 HTML | `design-taste-frontend` 규칙. UX 문구는 `agent-tone` | React·Next·Tailwind 스택 지침(산출물이 단일 HTML 이면 버림) |
