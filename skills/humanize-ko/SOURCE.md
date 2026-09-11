@@ -10,10 +10,12 @@ The copy in `materials` stays the editing target so a single change does not hav
 Fix the rule there, then overwrite this file. Editing only this copy leaves the two versions out of
 step.
 
-`humanizer` covers English patterns (em dash, "delve", inflated symbolism) and catches roughly half
-of what shows up in Korean. This skill covers the rest: translationese particles, uniform `-습니다`
-endings, service-desk politeness. Both apply to Korean prose. Overlapping items (rule of three,
-bold overuse, emoji) are fixed once.
+`humanizer` covers English patterns (em dash, "delve", copula avoidance, title case) and is no
+longer applied to Korean prose: half of it does not bind, and it costs 13k tokens to load. The six
+patterns that did bind in Korean were ported into this skill as items 7-12 (manufactured punchlines,
+aphorism formulas, authority tropes, fragmented headers, diff-anchored writing, speculative
+gap-filling). Item 7 is the counterweight to item 5, which otherwise encourages short sentences.
+`style-router` §1 carries the routing rule.
 
 ## 줄바꿈
 
