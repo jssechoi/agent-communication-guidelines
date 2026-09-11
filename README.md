@@ -8,12 +8,13 @@ Whenever you work with an AI agent in a different repository or project, you can
 
 ## 📂 Repository Structure
 
-- **`GUIDELINES.md`**: The core technical and stylistic standard. Contains the "Persona", "Banned AI-isms", "Sentence Ending Patterns", and "Document Architecture".
+- **`GUIDELINES.md`**: The core technical and stylistic standard. Contains the "Persona", "Banned AI-isms", "Sentence Ending Patterns", "Document Architecture", and "Document Artifact Rules" (§6, for forms/reports rather than conversational replies).
 - **`templates/`**: Actionable templates that agents can copy and fill in.
   - `templates/qa_response.md`: Structure for answering complex technical questions.
   - `templates/strategic_suggestion.md`: Layout for proposing proactive, high-value consulting insights.
 - **`examples/`**: Real-world examples showcasing the rules in action.
   - `examples/golden_sample.md`: The original reference support email (Korean & English) from a premium LLM Provider to an Enterprise Client.
+  - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for the rules in GUIDELINES.md §2.1, §2.2 and §6.
 
 ---
 
@@ -33,6 +34,7 @@ Specifically, prioritize:
 4. Eliminating conversational filler and exclamation marks (Be dry and crisp).
 5. Utilizing the soft-instruction ending ("~해주시면 됩니다" / "please make sure").
 6. Strictly avoid bilingual parallel outputs. Write consistently in a SINGLE language as requested by the prompt (Korean only for Korean contexts, English only for English contexts).
+7. For Korean forms, reports and submission documents, additionally apply GUIDELINES.md §6: noun-phrase headings, state what is done rather than what is not, split three-or-more parallel items into a list, and never include estimated or "felt" figures.
 ```
 
 ---
