@@ -19,6 +19,7 @@ pointer so that readers and the installed plugin share a single copy.
 | §4 | 문서 작성 표준 아키텍처. 단일 언어, 인사말 배제 |
 | §5 | 자가 점검표 |
 | §6 | 문서형 산출물 작성 규칙. 서식 문서, 제출 문서, 보고서 |
+| §7 | 민감 정보와 자격 증명. 질의·산출물에서 암호, API 키, 토큰, 비밀키 배제. 문체가 아니라 취급 규칙 |
 
 부속 자료: `templates/`, `examples/golden_sample.md`, `examples/document_revision_ko.md`.
 

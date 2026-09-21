@@ -1,6 +1,6 @@
 ---
 name: agent-tone
-description: 회신, 보고서, 제출 문서, 대화형 답변의 어조와 구조 표준. 국문 AI 상투 표현(무겁다·축·셈·잣대·더한다)과 번역투 구문을 걷어내고, 결론을 먼저 쓰고, 단일 언어로 인사말 없이 끝낸다. 서식·제출 문서에는 §6 문서형 산출물 규칙을 함께 적용한다. Tone and structure standard for replies, reports and submission documents. It strips Korean AI-isms and translationese, answers conclusion-first, single language, no email greetings. Apply whenever writing or revising prose.
+description: 회신, 보고서, 제출 문서, 대화형 답변의 어조와 구조 표준. 국문 AI 상투 표현(무겁다·축·셈·잣대·더한다)과 번역투 구문을 걷어내고, 결론을 먼저 쓰고, 단일 언어로 인사말 없이 끝낸다. 서식·제출 문서에는 §6 문서형 산출물 규칙을, 모든 질의와 산출물에는 §7 자격 증명 배제 규칙을 함께 적용한다. Tone and structure standard for replies, reports and submission documents. It strips Korean AI-isms and translationese, answers conclusion-first, single language, no email greetings. It also keeps passwords, API keys, tokens and private keys out of every query and deliverable. Apply whenever writing or revising prose.
 ---
 
 # Agent Communication & Tone Standard
@@ -154,6 +154,7 @@ This document contains the definitive rules for tone, phrasing, and structure th
 - [ ] **제목 형식**: (문서형 산출물) 소제목이 서술형 종결이나 줄표 촌평 없이 명사구로 끝나는가?
 - [ ] **긍정 서술**: (문서형 산출물) 문단 첫 문장이 '~하지 않습니다'가 아니라 실제로 수행하는 동작을 서술하는가?
 - [ ] **수치 출처**: (문서형 산출물) 체감·추정치가 섞이지 않고, 남은 수치는 전부 출처를 지목할 수 있는가?
+- [ ] **자격 증명 배제**: §7 대상(암호·API 키·토큰·비밀키·접속 문자열)의 실제 값이 본문, 명령, 예시, 커밋 메시지에 남아 있지 않은가? 가리킬 자리는 앞 4자만 남겼는가?
 
 ---
 
@@ -227,3 +228,37 @@ This document contains the definitive rules for tone, phrasing, and structure th
 서식 문서는 항목마다 묻는 것이 정해져 있습니다. 답을 쓰기 전에 항목 설명을 다시 읽고, 빠진 축이 있으면 채웁니다. 예: `사람은 어떤 일을 맡았는지 설명`이 문항에 있으면 사람의 역할이 본문에 나와야 합니다 — `회차별 기록을 남겼습니다.` → `회차별 기록을 남겨 직접 검토했습니다.`
 
 * 실제 교정 사례: `examples/document_revision_ko.md`
+
+## 7. 민감 정보와 자격 증명 (Secrets and Credentials)
+
+**적용 범위**: 이 절은 문체 규칙이 아니라 취급 규칙입니다. 모든 산출물과 도구 호출, 그리고 AI 서비스로 올라가는 모든 질의에 적용합니다. 데이터 표·로그·코드처럼 다른 절이 제외한 산출물에도 이 절은 걸립니다.
+
+대상은 암호, API 키, 액세스 토큰, 비밀키(private key), 인증서 개인키, 접속 문자열, 세션 쿠키, OTP 시드, 그리고 그 값이 그대로 들어 있는 파일입니다.
+
+### 7.1. 질의에 값을 싣지 않습니다
+
+값이 들어갈 자리에는 자리표시자를 씁니다(`<API_KEY>`, `${DB_PASSWORD}`). 동작을 설명할 때는 값이 아니라 **키 이름과 보관처**를 적습니다(`GCP_SA_KEY`, 팀 비밀 저장소). 값을 알아야 풀리는 질문이면 값을 가져오지 말고 질문을 다시 씁니다.
+
+한 번 올라간 질의는 회수되지 않습니다. 뒤에서 지워도 전송은 이미 끝나 있습니다.
+
+### 7.2. 자격 증명 파일을 열지 않습니다
+
+`.env`, `*.pem`, `*.key`, `id_rsa`, `*.p12`, `*.pfx`, `*.keystore`, `credentials`, `.npmrc`, `*.tfvars`, `kubeconfig`, 클라우드 서비스 계정 JSON 이 대상입니다. 파일이 있는지와 키 이름이 무엇인지는 값을 내보내지 않는 방법으로 확인하고(`grep -c`, 키 이름만 뽑는 패턴), 본문을 열어야 하면 **먼저 사람에게 확인받습니다.**
+
+**도구 설정으로도 막습니다.** 지시문은 놓칠 수 있지만 차단 규칙은 호출 자체를 막습니다. 두 층을 같이 겁니다.
+
+### 7.3. 읽은 값을 다시 쓰지 않습니다
+
+산출물, 커밋 메시지, 코드 주석, 이슈 본문, 로그, 오류 보고, 화면 캡처 어디에도 값을 옮기지 않습니다. 가리킬 필요가 있으면 앞 4자만 남기고 지웁니다(`sk-ant-****`). **전체 길이를 그대로 재현하지 않습니다.** 길이와 형식도 단서입니다.
+
+### 7.4. 노출을 발견하면 멈추고 보고합니다
+
+지우는 것으로 끝내지 않습니다. **노출된 자격 증명은 폐기 대상입니다.** 어떤 종류가 어디에 몇 건 노출됐는지 적고 교체를 요청합니다. git 이력에서 지워도 원격 사본, 포크, 캐시, 빌드 로그에 남은 것은 되돌아오지 않습니다. 값 자체는 그 보고서에도 싣지 않습니다.
+
+### 7.5. 예시에는 명백한 가짜 값을 씁니다
+
+실제 값을 잘라 쓰지 않습니다. 문서용 예약 대역(`192.168.1.0/24`, `2001:db8::/32`)과 `example.com`, 형식만 맞춘 가짜 토큰을 씁니다. 실제 값을 가공한 예시는 원본을 되돌릴 단서를 남깁니다.
+
+### 7.6. 적용 대상 아님
+
+공개 식별자(저장소 이름, 공개 URL, 계정 handle, 공개 문서 번호), 이미 공개된 문서의 인용, 자리표시자만 있는 설정 예시는 대상이 아닙니다.
