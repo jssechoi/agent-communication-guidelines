@@ -1,0 +1,2 @@
+# install.sh must stay LF. A CRLF shebang line breaks it on macOS and Linux.
+*.sh text eol=lf
