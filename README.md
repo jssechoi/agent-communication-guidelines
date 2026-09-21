@@ -9,7 +9,7 @@ Whenever you work with an AI agent in a different repository or project, you can
 ## Repository Structure
 
 - **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
-  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, and the document-artifact rules (§6) for forms and reports.
+  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
@@ -21,6 +21,7 @@ Whenever you work with an AI agent in a different repository or project, you can
   - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the §4 single-language rule, so its greeting and paired English section are **not** to be imitated.
   - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §2.1, §2.2 and §6.
 - **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
+- **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the always-on mandate snippets it writes. See `install/README.md`.
 
 ---
 
@@ -60,6 +61,28 @@ That is a client-side allowlist (`strictKnownMarketplaces` in org-managed settin
 - **Copy only the skills you want.** Every directory under `skills/` is self-contained. `skills/agent-tone/` and `skills/style-router/` are enough for the standard on its own.
 
 If you want the normal install path, ask your administrator to add this repository to the marketplace allowlist.
+
+### Install for Claude Code, Gemini and Codex at once
+
+Gemini CLI and Codex have no plugin mechanism, and in none of the three does a skill alone make
+the standard always-on. `install/` handles both parts:
+
+```bash
+git clone https://github.com/jssechoi/agent-communication-guidelines.git
+cd agent-communication-guidelines
+install/install.sh          # macOS, Linux
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install\install.ps1
+```
+
+It copies this repository into `~/.claude/skills/`, writes a Gemini skill, and appends a marked
+mandate block to `~/.claude/CLAUDE.md`, `~/.gemini/GEMINI.md` and `~/.codex/AGENTS.md`. Re-running
+replaces the block rather than adding a second one, and every file it changes is backed up first.
+Pass `-DryRun` / `--dry-run` to see the plan without writing.
+
+`install/README.md` covers what it does not do, and how to remove it.
 
 ---
 
