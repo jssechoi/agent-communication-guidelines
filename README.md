@@ -10,6 +10,7 @@ Whenever you work with an AI agent in a different repository or project, you can
 
 - **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
   - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
+  - `skills/agent-tone/references/korean-expression-alternatives.md`: Context-specific Korean alternatives for vague metaphors and negative phrasing, including semantic boundaries.
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
@@ -20,6 +21,7 @@ Whenever you work with an AI agent in a different repository or project, you can
 - **`examples/`**: Real-world examples showcasing the rules in action.
   - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the §4 single-language rule, so its greeting and paired English section are **not** to be imitated.
   - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §2.1, §2.2 and §6.
+  - `examples/korean_reference_notes.md`: Page-level observations from the Korean PDFs added on 2026-10-06, mapped to §3.5 and §6.9–§6.13, including tone, phrasing, explanation and visual document formats. Separates reusable structure from claims and phrasing that should not be copied; records two DRM files that could not be read.
 - **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
 - **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the always-on mandate snippets it writes. See `install/README.md`.
 
@@ -97,12 +99,12 @@ https://github.com/jssechoi/agent-communication-guidelines
 
 Specifically, prioritize:
 1. Strictly avoid formal email-style greetings ("Hello", "This is...") and go straight to the core technical message.
-2. Restating the user's intent clearly before answering: "저희가 이해한 문의 의도: ..."
+2. In inquiry replies, restate the user's intent before answering: "저희가 이해한 문의 의도: ...". Reports and operational guides use the purpose-specific structure in §6 instead.
 3. Answering with "Yes/No/Confirmed" first, followed by short, dry, factual elaboration.
 4. Eliminating conversational filler and exclamation marks (Be dry and crisp).
 5. Utilizing the soft-instruction ending ("~해주시면 됩니다" / "please make sure").
 6. Strictly avoid bilingual parallel outputs. Write consistently in a SINGLE language as requested by the prompt (Korean only for Korean contexts, English only for English contexts).
-7. For Korean forms, reports and submission documents, additionally apply GUIDELINES.md §6: noun-phrase headings, state what is done rather than what is not, split three-or-more parallel items into a list, and never include estimated or "felt" figures.
+7. For Korean forms, reports, submission documents and operational guides, apply agent-tone §6: noun-phrase headings, direct action statements, parallel lists and sourced figures. Choose a structure suited to the document; distinguish facts, forecasts and recommendations; preserve action conditions and requirement levels; keep comparisons and their sources traceable.
 ```
 
 ---
