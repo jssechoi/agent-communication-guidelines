@@ -10,6 +10,7 @@
 #   install/install.sh                        # all three tools
 #   install/install.sh --tools gemini,codex   # a subset
 #   install/install.sh --dry-run
+#   install/install.sh --layout skills        # one folder per skill under ~/.claude/skills/
 
 set -euo pipefail
 
@@ -21,18 +22,26 @@ BEGIN_TAG='<!-- agent-communication-guidelines:begin -->'
 END_TAG='<!-- agent-communication-guidelines:end -->'
 
 TOOLS="all"
+LAYOUT="plugin"
 DRY_RUN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --tools) TOOLS="$2"; shift 2 ;;
     --tools=*) TOOLS="${1#*=}"; shift ;;
+    --layout) LAYOUT="$2"; shift 2 ;;
+    --layout=*) LAYOUT="${1#*=}"; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,14p' "$0"; exit 0 ;;
     *) echo "Unknown option: $1" >&2; exit 2 ;;
   esac
 done
 
 [ -f "$RULES_PATH" ] || { echo "Run this from inside the cloned repository. Not found: $RULES_PATH" >&2; exit 1; }
+
+case "$LAYOUT" in
+  plugin|skills) ;;
+  *) echo "Unknown layout: $LAYOUT. Use plugin or skills." >&2; exit 2 ;;
+esac
 
 case ",$TOOLS," in *,all,*) TOOLS="claude,gemini,codex" ;; esac
 for t in ${TOOLS//,/ }; do
@@ -105,17 +114,66 @@ set_mandate() {
   changed=$((changed + 1))
 }
 
+# Layout "skills": each skills/<name> becomes ~/.claude/skills/<name>. A differing
+# existing folder is moved under ~/.claude/backups/ first; left under skills/ its
+# SKILL.md would load as a second copy of the same skill.
+install_skill_dirs() {
+  local target="$HOME/.claude/skills" src name dest
+  local backup_root="$HOME/.claude/backups/agent-communication-guidelines-$(date +%Y%m%d-%H%M%S)"
+  for src in "$REPO_ROOT"/skills/*/; do
+    src="${src%/}"; name="$(basename "$src")"; dest="$target/$name"
+    if [ -d "$dest" ] && diff -rq "$src" "$dest" >/dev/null 2>&1; then
+      echo "  [same]   skill $name"; skipped=$((skipped + 1)); continue
+    fi
+    if [ "$DRY_RUN" -eq 1 ]; then echo "  [copy]   skill $name -> $dest"; continue; fi
+    if [ -e "$dest" ]; then
+      mkdir -p "$backup_root"; mv "$dest" "$backup_root/$name"; echo "  [backup] $backup_root/$name"
+    fi
+    mkdir -p "$target"; cp -R "$src" "$dest"
+    echo "  [copy]   skill $name"; changed=$((changed + 1))
+  done
+}
+
+# Gemini has no plugin mechanism: one skill folder with the mandate as SKILL.md and
+# the full rules, their references and the router under references/.
+write_gemini_skill() {
+  local g_skill="$1" tmp f
+  tmp="$(mktemp -d)"
+  mkdir -p "$tmp/references"
+  tr -d '\r' < "$SCRIPT_DIR/gemini-skill/SKILL.md" \
+    | sed -e "/{{MANDATE}}/r $SNIPPET_DIR/mandate-core.md" -e "/{{MANDATE}}/d" \
+    | tr -d '\r' > "$tmp/SKILL.md"
+  cp "$RULES_PATH" "$tmp/references/guidelines.md"
+  cp "$REPO_ROOT/skills/style-router/SKILL.md" "$tmp/references/style-router.md"
+  for f in "$REPO_ROOT"/skills/agent-tone/references/*.md; do cp "$f" "$tmp/references/"; done
+  if [ -d "$g_skill" ] && diff -rq "$tmp" "$g_skill" >/dev/null 2>&1; then
+    echo "  [same]   $g_skill"; skipped=$((skipped + 1))
+  elif [ "$DRY_RUN" -eq 1 ]; then
+    echo "  [write]  $g_skill"
+  else
+    mkdir -p "$g_skill/references"
+    cp "$tmp/SKILL.md" "$g_skill/SKILL.md"
+    cp "$tmp"/references/*.md "$g_skill/references/"
+    echo "  [write]  $g_skill"; changed=$((changed + 1))
+  fi
+  rm -rf "$tmp"
+}
+
 echo
 echo "agent-communication-guidelines installer"
 echo "  repository : $REPO_ROOT"
 echo "  tools      : $TOOLS"
+echo "  layout     : $LAYOUT"
 [ "$DRY_RUN" -eq 1 ] && echo "  mode       : dry run, nothing is written"
 echo
 
 if has_tool claude; then
   echo "Claude Code"
   skill_dir="$HOME/.claude/skills/agent-communication-guidelines"
-  if [ "$REPO_ROOT" = "$skill_dir" ]; then
+  if [ "$LAYOUT" = "skills" ]; then
+    install_skill_dirs
+    if [ -d "$skill_dir" ]; then echo "  [warn]   plugin copy also present, remove one layout: $skill_dir"; fi
+  elif [ "$REPO_ROOT" = "$skill_dir" ]; then
     echo "  [same]   repository is already the skills-dir plugin"
   elif [ "$DRY_RUN" -eq 1 ]; then
     echo "  [copy]   $REPO_ROOT -> $skill_dir"
@@ -131,19 +189,7 @@ fi
 
 if has_tool gemini; then
   echo "Gemini CLI"
-  g_skill="$HOME/.gemini/skills/agent-communication-guidelines"
-  if [ "$DRY_RUN" -eq 1 ]; then
-    echo "  [write]  $g_skill/SKILL.md"
-    echo "  [write]  $g_skill/references/guidelines.md"
-  else
-    mkdir -p "$g_skill/references"
-    tr -d '\r' < "$SCRIPT_DIR/gemini-skill/SKILL.md" \
-      | sed -e "/{{MANDATE}}/r $SNIPPET_DIR/mandate-core.md" -e "/{{MANDATE}}/d" \
-      | tr -d '\r' > "$g_skill/SKILL.md"
-    cp "$RULES_PATH" "$g_skill/references/guidelines.md"
-    echo "  [write]  $g_skill"
-    changed=$((changed + 1))
-  fi
+  write_gemini_skill "$HOME/.gemini/skills/agent-communication-guidelines"
   set_mandate "$HOME/.gemini/GEMINI.md" head-gemini.md "GEMINI.md mandate"
   echo
 fi

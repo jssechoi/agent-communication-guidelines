@@ -9,20 +9,22 @@ Whenever you work with an AI agent in a different repository or project, you can
 ## Repository Structure
 
 - **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
-  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, the mail/report format switch (§3.6) with the report-format rules for evaluations and slides (§8), and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
-  - `skills/agent-tone/references/korean-expression-alternatives.md`: Context-specific Korean alternatives for vague metaphors and negative phrasing, including semantic boundaries.
+  - `skills/agent-tone/SKILL.md`: **The standard itself**, kept to the rules every deliverable needs: persona, scope table (§2), one banned-expression table (§3), sentence endings and judgment strength (§4), the mail/report format switch (§5), the secrets rule (§6) that keeps passwords, API keys, tokens and private keys out of every query and deliverable, and a short checklist (§7).
+  - `skills/agent-tone/references/`: Rules read only when the matching document is written. `mail-format.md` (M1–M3: reply skeleton, document tone, internal metadata), `document-rules.md` (D1–D12: forms, reports, guides, slides), `report-format.md` (R1–R10: evaluations, status reports, slides), `korean-expression-alternatives.md` (context-specific alternatives for §3).
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
-- **`GUIDELINES.md`**: Pointer to `skills/agent-tone/SKILL.md` plus a section index. The rules are kept in one file only.
+- **`GUIDELINES.md`**: Table of contents and the procedure for adding, merging and removing rules, including the size budget.
+- **`CHANGELOG.md`**: What changed in the rules and why.
+- **`tests/`**: `rules.test.mjs` checks size budgets, section and D/R/M references and links; `install.Tests.ps1` (Pester 3.4) and `install-sh.test.mjs` run both installers against a temporary home. `tests/run-all.ps1` runs everything.
 - **`templates/`**: Actionable templates that agents can copy and fill in.
   - `templates/qa_response.md`: Structure for answering complex technical questions.
   - `templates/strategic_suggestion.md`: Layout for proposing proactive, high-value consulting insights.
 - **`examples/`**: Real-world examples showcasing the rules in action.
-  - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the §4 single-language rule, so its greeting and paired English section are **not** to be imitated.
-  - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §2.1, §2.2 and §6.
-  - `examples/korean_reference_notes.md`: Page-level observations from the Korean PDFs added on 2026-10-06, mapped to §3.5 and §6.9–§6.13, including tone, phrasing, explanation and visual document formats. Separates reusable structure from claims and phrasing that should not be copied; records two DRM files that could not be read.
-  - `examples/report_format_ko.md`: One fictional evaluation written three ways: mail format (합쇼체), and report format as a document and as a slide (§3.6, §8). Includes a table of results to avoid.
+  - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the single-language rule (§1), so its greeting and paired English section are **not** to be imitated.
+  - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §3 and `references/document-rules.md`.
+  - `examples/korean_reference_notes.md`: Page-level observations from the Korean PDFs added on 2026-10-06, mapped to M2 and D7–D11, including tone, phrasing, explanation and visual document formats. Separates reusable structure from claims and phrasing that should not be copied; records two DRM files that could not be read.
+  - `examples/report_format_ko.md`: One fictional evaluation written three ways: mail format (합쇼체), and report format as a document and as a slide (§5, `references/report-format.md`). Includes a table of results to avoid.
 - **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
 - **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the always-on mandate snippets it writes. See `install/README.md`.
 
@@ -85,6 +87,11 @@ mandate block to `~/.claude/CLAUDE.md`, `~/.gemini/GEMINI.md` and `~/.codex/AGEN
 replaces the block rather than adding a second one, and every file it changes is backed up first.
 Pass `-DryRun` / `--dry-run` to see the plan without writing.
 
+If you already keep these skills as standalone folders under `~/.claude/skills/` (`agent-tone`,
+`humanize-ko` and so on), pass `-Layout skills` / `--layout skills`. Each skill is then copied to its
+own folder, and an existing folder that differs is moved to `~/.claude/backups/` first, so no skill
+loads twice.
+
 `install/README.md` covers what it does not do, and how to remove it.
 
 ---
@@ -100,13 +107,13 @@ https://github.com/jssechoi/agent-communication-guidelines
 
 Specifically, prioritize:
 1. Strictly avoid formal email-style greetings ("Hello", "This is...") and go straight to the core technical message.
-2. In inquiry replies, restate the user's intent before answering: "저희가 이해한 문의 의도: ...". Reports and operational guides use the purpose-specific structure in §6 instead.
+2. In inquiry replies, restate the user's intent before answering: "저희가 이해한 문의 의도: ...". Reports and operational guides use the purpose-specific structure in `references/document-rules.md` instead.
 3. Answering with "Yes/No/Confirmed" first, followed by short, dry, factual elaboration.
 4. Eliminating conversational filler and exclamation marks (Be dry and crisp).
 5. Utilizing the soft-instruction ending ("~해주시면 됩니다" / "please make sure").
 6. Strictly avoid bilingual parallel outputs. Write consistently in a SINGLE language as requested by the prompt (Korean only for Korean contexts, English only for English contexts).
-7. For Korean forms, reports, submission documents and operational guides, apply agent-tone §6: noun-phrase headings, direct action statements, parallel lists and sourced figures. Choose a structure suited to the document; distinguish facts, forecasts and recommendations; preserve action conditions and requirement levels; keep comparisons and their sources traceable.
-8. Write Korean documents in one of two formats (agent-tone §3.6). Mail format (메일 형식) is 합쇼체 for replies, requests and guides. Report format (보고 형식) is noun-ending 개조식 for evaluations, status reports and slides: conclusion first, the same block order for every subject, and a measured value, proper noun or reproduced case behind every evaluative word (§8). An explicit format in the request overrides the default.
+7. For Korean forms, reports, submission documents and operational guides, apply `skills/agent-tone/references/document-rules.md`: noun-phrase headings, direct action statements, parallel lists and sourced figures. Choose a structure suited to the document; distinguish facts, forecasts and recommendations; preserve action conditions and requirement levels; keep comparisons and their sources traceable.
+8. Write Korean documents in one of two formats (agent-tone §5). Mail format (메일 형식) is 합쇼체 for replies, requests and guides. Report format (보고 형식) is noun-ending 개조식 for evaluations, status reports and slides: conclusion first, the same block order for every subject, and a measured value, proper noun or reproduced case behind every evaluative word (`references/report-format.md`). An explicit format in the request overrides the default.
 ```
 
 ---
