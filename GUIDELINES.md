@@ -18,13 +18,15 @@ pointer so that readers and the installed plugin share a single copy.
 | §2.3 | 추상어·부정형 설명의 문맥별 구체화. 축·무게·남기지 않습니다의 대안 |
 | §3 | 문장 종결 패턴. 단호한 사실 확인, 부드러운 기술적 지시, 객관적 수동식 서술, 가치 제안형 제안 |
 | §3.5 | 한국어 문서의 어조·격식 수준·표현·설명 방식. 자문 보고서, 운영 안내, 기술 조사 |
+| §3.6 | 산출물 형식 지정. 메일 형식(합쇼체)과 보고 형식(개조식)의 기본 적용 대상, 지정 방법, 혼합 규칙 |
 | §4 | 문서 작성 표준 아키텍처. 단일 언어, 인사말 배제 |
 | §5 | 자가 점검표 |
 | §6 | 문서형 산출물 작성 규칙. 서식 문서, 제출 문서, 분석 보고서, 운영 안내문 |
 | §6.9~§6.13 | 목적별 정보 순서, 사실·전망·권고 구분, 실행 조건과 의무 수준, 비교표와 출처, 자료의 시각적 위계 |
 | §7 | 민감 정보와 자격 증명. 질의·산출물에서 암호, API 키, 토큰, 비밀키 배제. 문체가 아니라 취급 규칙 |
+| §8 | 보고 형식. 결론 우선, 대상별 동일 틀, 블록별 종결, `라벨: 설명`, 평가어의 구체 근거, 척도·범위 표시, 장표 구성 |
 
-부속 자료: `templates/`, `examples/golden_sample.md`, `examples/document_revision_ko.md`, [한국어 참고 샘플 분석](examples/korean_reference_notes.md).
+부속 자료: `templates/`, `examples/golden_sample.md`, `examples/document_revision_ko.md`, [한국어 참고 샘플 분석](examples/korean_reference_notes.md), [메일 형식과 보고 형식 작성 예](examples/report_format_ko.md).
 
 ## 다른 스킬과의 우선순위 (Precedence)
 
