@@ -9,7 +9,7 @@ Whenever you work with an AI agent in a different repository or project, you can
 ## Repository Structure
 
 - **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
-  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
+  - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, the mail/report format switch (§3.6) with the report-format rules for evaluations and slides (§8), and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
   - `skills/agent-tone/references/korean-expression-alternatives.md`: Context-specific Korean alternatives for vague metaphors and negative phrasing, including semantic boundaries.
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
@@ -22,6 +22,7 @@ Whenever you work with an AI agent in a different repository or project, you can
   - `examples/golden_sample.md`: Reference support email from a premium LLM provider to an enterprise client. Predates the §4 single-language rule, so its greeting and paired English section are **not** to be imitated.
   - `examples/document_revision_ko.md`: A human-edited Korean submission document, paired before/after. Source evidence for §2.1, §2.2 and §6.
   - `examples/korean_reference_notes.md`: Page-level observations from the Korean PDFs added on 2026-10-06, mapped to §3.5 and §6.9–§6.13, including tone, phrasing, explanation and visual document formats. Separates reusable structure from claims and phrasing that should not be copied; records two DRM files that could not be read.
+  - `examples/report_format_ko.md`: One fictional evaluation written three ways: mail format (합쇼체), and report format as a document and as a slide (§3.6, §8). Includes a table of results to avoid.
 - **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
 - **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the always-on mandate snippets it writes. See `install/README.md`.
 
@@ -105,6 +106,7 @@ Specifically, prioritize:
 5. Utilizing the soft-instruction ending ("~해주시면 됩니다" / "please make sure").
 6. Strictly avoid bilingual parallel outputs. Write consistently in a SINGLE language as requested by the prompt (Korean only for Korean contexts, English only for English contexts).
 7. For Korean forms, reports, submission documents and operational guides, apply agent-tone §6: noun-phrase headings, direct action statements, parallel lists and sourced figures. Choose a structure suited to the document; distinguish facts, forecasts and recommendations; preserve action conditions and requirement levels; keep comparisons and their sources traceable.
+8. Write Korean documents in one of two formats (agent-tone §3.6). Mail format (메일 형식) is 합쇼체 for replies, requests and guides. Report format (보고 형식) is noun-ending 개조식 for evaluations, status reports and slides: conclusion first, the same block order for every subject, and a measured value, proper noun or reproduced case behind every evaluative word (§8). An explicit format in the request overrides the default.
 ```
 
 ---
