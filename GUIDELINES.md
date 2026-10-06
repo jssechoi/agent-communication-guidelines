@@ -18,10 +18,11 @@ pointer so that readers and the installed plugin share a single copy.
 | §3 | 문장 종결 패턴. 단호한 사실 확인, 부드러운 기술적 지시, 객관적 수동식 서술, 가치 제안형 제안 |
 | §4 | 문서 작성 표준 아키텍처. 단일 언어, 인사말 배제 |
 | §5 | 자가 점검표 |
-| §6 | 문서형 산출물 작성 규칙. 서식 문서, 제출 문서, 보고서 |
+| §6 | 문서형 산출물 작성 규칙. 서식 문서, 제출 문서, 분석 보고서, 운영 안내문 |
+| §6.9~§6.12 | 목적별 정보 순서, 사실·전망·권고 구분, 실행 조건과 의무 수준, 비교표와 출처 |
 | §7 | 민감 정보와 자격 증명. 질의·산출물에서 암호, API 키, 토큰, 비밀키 배제. 문체가 아니라 취급 규칙 |
 
-부속 자료: `templates/`, `examples/golden_sample.md`, `examples/document_revision_ko.md`.
+부속 자료: `templates/`, `examples/golden_sample.md`, `examples/document_revision_ko.md`, [한국어 참고 샘플 분석](examples/korean_reference_notes.md).
 
 ## 다른 스킬과의 우선순위 (Precedence)
 
