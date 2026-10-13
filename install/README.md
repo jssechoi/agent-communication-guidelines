@@ -30,14 +30,25 @@ install/install.sh --tools gemini,codex --dry-run
 
 `-DryRun` / `--dry-run` prints the planned actions and writes nothing. Start there.
 
+Two more options:
+
+- `-Layout skills` / `--layout skills` copies each folder under `skills/` to `~/.claude/skills/<name>`
+  instead of copying the whole repository as one plugin folder. Use it when those skills already exist
+  as standalone folders. A differing existing folder is moved to
+  `~/.claude/backups/agent-communication-guidelines-<timestamp>/` first; it is not left under
+  `skills/`, where its `SKILL.md` would load as a second copy. Identical folders are skipped.
+- `-HomeDir <path>` (PowerShell only; for `install.sh` set `HOME`) installs into another home
+  directory. The tests use it to install into a temporary folder.
+
 ## What it touches
 
 | Path | Action |
 | :--- | :--- |
-| `~/.claude/skills/agent-communication-guidelines/` | Copy of this repository, loaded as `agent-communication-guidelines@skills-dir` |
+| `~/.claude/skills/agent-communication-guidelines/` | Copy of this repository, loaded as `agent-communication-guidelines@skills-dir` (default layout) |
+| `~/.claude/skills/<name>/` | One copy per skill folder (`-Layout skills`) |
 | `~/.claude/CLAUDE.md` | Mandate block appended |
 | `~/.gemini/skills/agent-communication-guidelines/SKILL.md` | Written from `install/gemini-skill/SKILL.md` |
-| `~/.gemini/skills/agent-communication-guidelines/references/guidelines.md` | Copy of `skills/agent-tone/SKILL.md` |
+| `~/.gemini/skills/agent-communication-guidelines/references/` | `guidelines.md` (copy of `skills/agent-tone/SKILL.md`), every file in `skills/agent-tone/references/`, and `style-router.md` |
 | `~/.gemini/GEMINI.md` | Mandate block appended |
 | `~/.codex/AGENTS.md` | Mandate block appended |
 
@@ -75,9 +86,9 @@ Re-run the installer from the new location.
   Remove an earlier hand-written section first, or you will keep two copies that drift apart.
 - **It does not track this clone.** The copy under `~/.claude/skills/` is a copy. After
   `git pull`, run the installer again.
-- **It does not check for skill name collisions.** If `humanizer`, `newsroom-style`,
-  `humanize-ko`, `voice-en` or `design-taste-frontend` already exist as standalone skills in
-  `~/.claude/skills/`, the bundled copies shadow them. Remove one side.
+- **It does not remove the other layout.** With the default layout it warns when a bundled skill
+  also exists as a standalone folder in `~/.claude/skills/`; with `-Layout skills` it warns when the
+  plugin folder is present. Remove one side, or use `-Layout skills` from the start.
 
 ## Removing it
 
@@ -92,3 +103,8 @@ instruction files are next to them.
 `install.ps1` is ASCII-only on purpose. Windows PowerShell 5.1 reads a BOM-less `.ps1` as the
 system ANSI codepage, which corrupts Korean string literals, so all Korean text lives in the
 UTF-8 snippet files and is read at run time.
+
+Dot-sourcing it (`. .\install\install.ps1`) defines the functions without installing anything.
+`tests\install.Tests.ps1` uses that to test each function, and `tests\install-sh.test.mjs` runs
+`install.sh` against a temporary `HOME`. Run both with
+`powershell -ExecutionPolicy Bypass -File tests\run-all.ps1`.
