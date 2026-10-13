@@ -1,7 +1,7 @@
 {
   "name": "agent-communication-guidelines",
-  "description": "Korean-first writing standard for AI agents. Strips Korean AI-isms and translationese, answers conclusion-first in a single language with no email greetings, and applies a separate rule set to forms, reports and submission documents. Bundles humanizer, newsroom-style and design-taste-frontend behind a router skill that defines precedence.",
-  "version": "1.0.0",
+  "description": "Korean-first writing standard for AI agents. Strips Korean AI-isms and translationese, answers conclusion-first in a single language with no email greetings, and applies a separate rule set to forms, reports and submission documents. Bundles humanizer, newsroom-style and design-taste-frontend behind a router skill that defines precedence. Includes a commit-brief workflow for documenting GitHub commits.",
+  "version": "1.1.0",
   "author": {
     "name": "jssechoi"
   },

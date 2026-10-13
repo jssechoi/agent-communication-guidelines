@@ -8,12 +8,13 @@ Whenever you work with an AI agent in a different repository or project, you can
 
 ## Repository Structure
 
-- **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
+- **`skills/`**: The installable payload. Eight skills, each a `SKILL.md`.
   - `skills/agent-tone/SKILL.md`: **The standard itself**, kept to the rules every deliverable needs: persona, scope table (§2), one banned-expression table (§3), sentence endings and judgment strength (§4), the mail/report format switch (§5), the secrets rule (§6) that keeps passwords, API keys, tokens and private keys out of every query and deliverable, and a short checklist (§7).
   - `skills/agent-tone/references/`: Rules read only when the matching document is written. `mail-format.md` (M1–M3: reply skeleton, document tone, internal metadata), `document-rules.md` (D1–D12: forms, reports, guides, slides), `report-format.md` (R1–R10: evaluations, status reports, slides), `korean-expression-alternatives.md` (context-specific alternatives for §3).
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
+  - `skills/commit-brief/`: One brief per GitHub commit: HTML for complex changes or diagrams, Markdown for simple text and charts.
 - **`GUIDELINES.md`**: Table of contents and the procedure for adding, merging and removing rules, including the size budget.
 - **`CHANGELOG.md`**: What changed in the rules and why.
 - **`tests/`**: `rules.test.mjs` checks size budgets, section and D/R/M references and links; `install.Tests.ps1` (Pester 3.4) and `install-sh.test.mjs` run both installers against a temporary home. `tests/run-all.ps1` runs everything.
@@ -93,6 +94,37 @@ own folder, and an existing folder that differs is moved to `~/.claude/backups/`
 loads twice.
 
 `install/README.md` covers what it does not do, and how to remove it.
+
+---
+
+## Commit briefs across projects
+
+The `commit-brief` skill packages the per-commit documentation workflow for reuse
+across projects. Each commit includes one brief in the same commit as its changes:
+HTML for complex algorithms, logic, UI, data flows, or diagrams; Markdown for simple
+changes explained with text, tables, and charts. Briefs default to `docs/commit-briefs/`.
+
+Claude Code receives the skill with this repository's plugin. For a standalone Codex
+installation, copy `skills/commit-brief/` into your Codex home directory's `skills/`
+folder (normally `~/.codex/skills/commit-brief/`). The skill is self-contained and can
+also be read directly by other agents.
+
+To require it across projects, add this block to the agent's global instruction file
+(`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`). Replace the path with the actual installed
+`SKILL.md` path:
+
+```markdown
+## GitHub commit briefs
+
+Every commit intended for GitHub must include exactly one brief file in the same
+commit. Use HTML for complex algorithms, logic, UI, data flows, or diagrams; use
+Markdown for simple text, tables, and charts. Before preparing or amending a commit,
+read and follow the commit-brief skill at <absolute-path>/commit-brief/SKILL.md.
+```
+
+The existing tone installer does not add this commit rule; install the skill and add
+the global instruction separately. This is an agent workflow rule, not a GitHub
+server check. The full workflow is in [the skill](skills/commit-brief/SKILL.md).
 
 ---
 
