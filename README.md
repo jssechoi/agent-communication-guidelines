@@ -8,12 +8,13 @@ Whenever you work with an AI agent in a different repository or project, you can
 
 ## Repository Structure
 
-- **`skills/`**: The installable payload. Seven skills, each a `SKILL.md`.
+- **`skills/`**: The installable payload. Eight skills, each a `SKILL.md`.
   - `skills/agent-tone/`: **The standard itself.** Persona, banned AI-isms, restricted metaphors, banned translationese, sentence-ending patterns, document layout, self-checklist, the document-artifact rules (§6) for forms and reports, the mail/report format switch (§3.6) with the report-format rules for evaluations and slides (§8), and the secrets rule (§7) that keeps passwords, API keys, tokens and private keys out of every query and deliverable.
   - `skills/agent-tone/references/korean-expression-alternatives.md`: Context-specific Korean alternatives for vague metaphors and negative phrasing, including semantic boundaries.
   - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
+  - `skills/commit-brief/`: One brief per GitHub commit: HTML for complex changes or diagrams, Markdown for simple text and charts.
 - **`GUIDELINES.md`**: Pointer to `skills/agent-tone/SKILL.md` plus a section index. The rules are kept in one file only.
 - **`templates/`**: Actionable templates that agents can copy and fill in.
   - `templates/qa_response.md`: Structure for answering complex technical questions.
@@ -86,6 +87,37 @@ replaces the block rather than adding a second one, and every file it changes is
 Pass `-DryRun` / `--dry-run` to see the plan without writing.
 
 `install/README.md` covers what it does not do, and how to remove it.
+
+---
+
+## Commit briefs across projects
+
+The `commit-brief` skill packages the per-commit documentation workflow for reuse
+across projects. Each commit includes one brief in the same commit as its changes:
+HTML for complex algorithms, logic, UI, data flows, or diagrams; Markdown for simple
+changes explained with text, tables, and charts. Briefs default to `docs/commit-briefs/`.
+
+Claude Code receives the skill with this repository's plugin. For a standalone Codex
+installation, copy `skills/commit-brief/` into your Codex home directory's `skills/`
+folder (normally `~/.codex/skills/commit-brief/`). The skill is self-contained and can
+also be read directly by other agents.
+
+To require it across projects, add this block to the agent's global instruction file
+(`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`). Replace the path with the actual installed
+`SKILL.md` path:
+
+```markdown
+## GitHub commit briefs
+
+Every commit intended for GitHub must include exactly one brief file in the same
+commit. Use HTML for complex algorithms, logic, UI, data flows, or diagrams; use
+Markdown for simple text, tables, and charts. Before preparing or amending a commit,
+read and follow the commit-brief skill at <absolute-path>/commit-brief/SKILL.md.
+```
+
+The existing tone installer does not add this commit rule; install the skill and add
+the global instruction separately. This is an agent workflow rule, not a GitHub
+server check. The full workflow is in [the skill](skills/commit-brief/SKILL.md).
 
 ---
 
