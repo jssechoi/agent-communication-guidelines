@@ -2,10 +2,9 @@
 
 Wires the tone standard into Claude Code, Gemini CLI and Codex on one machine.
 
-Installing a skill is not enough to make the standard always-on: skills load when their
-description matches or when they are called by name. The installer therefore also writes an
-always-on mandate into each agent's instruction file. Gemini and Codex have no plugin
-mechanism at all, so for those two the instruction file is the only route.
+Skills activate for requested documents or explicit style instructions. The installer records
+these conditions in each instruction file. Ordinary conversation is excluded from ACG prose
+style; credentials handling applies to every query and deliverable.
 
 ## Run it
 

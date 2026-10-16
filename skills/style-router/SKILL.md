@@ -1,6 +1,6 @@
 ---
 name: style-router
-description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 무엇을 먼저 적용할지 정한다. agent-tone, humanizer, humanize-ko, voice-en, newsroom-style, design-taste-frontend 의 적용 순서, 산출물 계열별로 함께 거는 스킬, 국문과 영문 규칙이 반대인 지점, 항상 적용을 강제하는 방법. 글이나 화면을 쓰거나 고치기 전에 먼저 읽는다. Routing and precedence for the writing and design skills bundled in this plugin.
+description: 목적이 명확한 문서 작성·수정 또는 명시적인 문체 요청에 ACG와 산문 스킬의 적용 순서·참조 범위를 정한다. 일반 질의응답·진행 상황·코드 설명에는 문체를 자동 적용하지 않는다. 프런트엔드 요청에서는 디자인 스킬을 선택한다.
 ---
 
 # Style router
@@ -9,6 +9,8 @@ description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 �
 정하지 않으면 마지막에 실행된 규칙이 이깁니다. 아래가 그 순서입니다.
 
 ## 1. 적용 순서 (Precedence)
+
+먼저 agent-tone §2의 적용 조건을 확인합니다. 아래 문체 순서는 적용 대상 문서·문체 요청에만 사용합니다.
 
 0. **`agent-tone` §6 민감 정보와 자격 증명이 다른 모든 항목보다 우선합니다.** 문체 규칙이 아니라 취급
    규칙이라 산문·코드·데이터 표·로그를 가리지 않고 걸립니다. 아래 순서는 문체에만 해당합니다.
@@ -35,12 +37,12 @@ description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 �
 
 | 산출물 | 함께 거는 스킬 | 걸지 않는 것 |
 | :--- | :--- | :--- |
-| 대화형 답변, 코드 주석, 커밋 메시지, 리뷰 코멘트 | `agent-tone` | 문체 프로필, 문서형 규칙 |
+| 일반 질의응답, 진행 상황, 코드 설명·주석·커밋·리뷰 | `agent-tone` §6만 | ACG 문체와 문서형 규칙. 명시 지정 시 그 범위만 적용 |
 | 국문 문서형 산출물: 메일 형식·보고 형식 문서, 서식·제출 문서 | `agent-tone` | `humanize-ko` 의 종결 변주·짧은 문장·목록 축소·리듬 변주·단정 우선, 보도체·다큐체 프로필 |
-| 자료·안내 문서: 기준서, 명세, README, 운영 원칙 | `agent-tone` 메일 형식 | 문체 프로필, `newsroom-style` |
-| 국문 일반 산문: 기사, 에세이, 서술형 브리핑 | `agent-tone` + `humanize-ko` | `humanizer`, `voice-en`, `newsroom-style` |
-| 영문 산문 | `agent-tone` + `humanizer` + `voice-en`(뉴스체면 + `newsroom-style`) | `humanize-ko` |
-| 프런트엔드 화면, 단일 HTML | `design-taste-frontend`. UX 문구는 `agent-tone` | React·Next·Tailwind 스택 지침(산출물이 단일 HTML 이면 버림) |
+| 요청받은 자료·안내 문서 작성·수정: 기준서, 명세, README, 운영 원칙 | `agent-tone` 메일 형식 | 문체 프로필, `newsroom-style` |
+| 요청받은 국문 산문 작성·교정: 기사, 에세이, 서술형 브리핑 | `agent-tone` + `humanize-ko` | `humanizer`, `voice-en`, `newsroom-style` |
+| 요청받은 영문 산문 작성·교정 | `agent-tone` + `humanizer` + `voice-en`(뉴스체면 + `newsroom-style`) | `humanize-ko` |
+| 프런트엔드 화면, 단일 HTML | `design-taste-frontend`. ACG 문체는 문서 목적 또는 명시 지정 시에만 적용 | React·Next·Tailwind 스택 지침(산출물이 단일 HTML 이면 버림) |
 | 데이터 표, 로그, 체크리스트, 런시트, 스크립트 출력, 코드 | `agent-tone` §6 만 | 산문 문체 전부 |
 
 **산문 교정 기준을 문서형 산출물에 그대로 걸지 않습니다.** 짧은 문장, 리듬 변주, 목록 축소, 단정 우선은
@@ -69,19 +71,15 @@ description: 이 플러그인의 산문·프런트엔드 스킬이 겹칠 때 �
 
 전체 대조는 `skills/voice-en/SKILL.md` 의 해당 절을 봅니다.
 
-## 4. 항상 적용을 강제하는 방법 (Enforcement)
+## 4. 조건부 적용 지침 (Activation)
 
-**스킬만 설치하면 항상 걸리지 않습니다.** 스킬은 설명 문구가 맞을 때나 이름으로 불릴 때 로드됩니다.
-어조는 모든 산출물에 걸려야 하므로 강제 문구를 지시 파일에 넣습니다. `install/install.ps1`·`install.sh`
-가 `CLAUDE.md`, `GEMINI.md`, `AGENTS.md` 에 같은 블록을 씁니다. 손으로 넣을 때는 아래를 붙입니다.
+스킬 설치는 모든 답변에 문체를 강제한다는 뜻이 아닙니다.
+`install/install.ps1`·`install.sh`는 각 도구의 전역 지침에 다음 범위를 기록합니다.
 
-```markdown
-# Communication Style Mandate
-
-산문을 쓰거나 고칠 때는 호출 여부와 무관하게 항상 `agent-tone` 스킬을 적용한다.
-적용 순서와 산출물별 범위는 `style-router` 스킬이 정하고, 충돌하면 `agent-tone` 이 우선한다.
-대화형 답변도 대상이다.
-```
+- 보고·평가·제출·회신·요청서·안내 등 목적이 명확한 문서 작성·수정 또는 명시적인 문체 지정에 적용합니다.
+- 일반 질의응답·진행 상황·코드 설명·주석·커밋·리뷰에는 ACG 문체를 강제하지 않습니다.
+- 적용 대상의 형식과 스킬 순서는 agent-tone §2·§5와 이 라우터를 따릅니다.
+- 자격 증명 취급(agent-tone §6)은 모든 질의·산출물에 적용합니다.
 
 ## 5. `impeccable` 은 선택 도구입니다 (Optional companion, not bundled)
 

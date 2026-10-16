@@ -9,9 +9,9 @@ Whenever you work with an AI agent in a different repository or project, you can
 ## Repository Structure
 
 - **`skills/`**: The installable payload. Eight skills, each a `SKILL.md`.
-  - `skills/agent-tone/SKILL.md`: **The standard itself**, kept to the rules every deliverable needs: persona, scope table (§2), one banned-expression table (§3), sentence endings and judgment strength (§4), the mail/report format switch (§5), the secrets rule (§6) that keeps passwords, API keys, tokens and private keys out of every query and deliverable, and a short checklist (§7).
+  - `skills/agent-tone/SKILL.md`: **The standard itself**, covering requested documents and universal credentials handling: persona, scope table (§2), one banned-expression table (§3), sentence endings and judgment strength (§4), the mail/report format switch (§5), the secrets rule (§6) that keeps passwords, API keys, tokens and private keys out of every query and deliverable, and a short checklist (§7).
   - `skills/agent-tone/references/`: Rules read only when the matching document is written. `mail-format.md` (M1–M3: reply skeleton, document tone, internal metadata), `document-rules.md` (D1–D12: forms, reports, guides, slides), `report-format.md` (R1–R10: evaluations, status reports, slides), `korean-expression-alternatives.md` (context-specific alternatives for §3).
-  - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to make the standard always-on.
+  - `skills/style-router/`: **Read this first.** Which skill applies to which deliverable, what wins on conflict, where Korean and English rules invert, and how to define conditional activation.
   - `skills/humanize-ko/`, `skills/voice-en/`: Korean and English prose rules. Own work, same license as this repository.
   - `skills/humanizer/`, `skills/newsroom-style/`, `skills/design-taste-frontend/`: bundled third-party skills, each with its own `LICENSE` and `SOURCE.md`. See `NOTICE`.
   - `skills/commit-brief/`: One brief per GitHub commit: HTML for complex changes or diagrams, Markdown for simple text and charts.
@@ -27,7 +27,7 @@ Whenever you work with an AI agent in a different repository or project, you can
   - `examples/korean_reference_notes.md`: Page-level observations from the Korean PDFs added on 2026-10-06, mapped to M2 and D7–D11, including tone, phrasing, explanation and visual document formats. Separates reusable structure from claims and phrasing that should not be copied; records two DRM files that could not be read.
   - `examples/report_format_ko.md`: One fictional evaluation written three ways: mail format (합쇼체), and report format as a document and as a slide (§5, `references/report-format.md`). Includes a table of results to avoid.
 - **`.claude-plugin/`**: Plugin and marketplace manifests for Claude Code.
-- **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the always-on mandate snippets it writes. See `install/README.md`.
+- **`install/`**: Installer for Claude Code, Gemini CLI and Codex, plus the activation and credentials-handling snippets it writes. See `install/README.md`.
 
 ---
 
@@ -40,7 +40,7 @@ claude plugin install agent-communication-guidelines@jssechoi-skills
 
 Skills load on the next session. `claude plugin details agent-communication-guidelines` reports the projected token cost.
 
-**Installing is not enough to make the standard always-on.** Skills load when their description matches or when they are called by name. Tone has to apply to every deliverable, so add the mandate below to your instruction file. `skills/style-router/SKILL.md` §4 has the same snippet.
+**Installation does not impose a style on every answer.** Apply ACG to requested reports, submissions, correspondence and other purpose-specific documents, or explicit style requests. Ordinary conversation is excluded. Credentials handling remains universal. The router §4 defines the same scope.
 
 `impeccable` is referenced by the router but **not bundled**: its reference material and scripts run to about 3.2 MB across 107 JavaScript modules. Install it from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) if you want it.
 
@@ -70,8 +70,8 @@ If you want the normal install path, ask your administrator to add this reposito
 
 ### Install for Claude Code, Gemini and Codex at once
 
-Gemini CLI and Codex have no plugin mechanism, and in none of the three does a skill alone make
-the standard always-on. `install/` handles both parts:
+The installer supplies skills and instruction blocks for all three tools. It records conditional
+prose activation and universal credentials handling:
 
 ```bash
 git clone https://github.com/jssechoi/agent-communication-guidelines.git
@@ -134,10 +134,12 @@ To instruct any AI agent to use this standard, add the following prompt snippet 
 
 ```markdown
 # Communication Style Mandate
-You must strictly follow the communication style and tone defined in:
+For requested reports or purpose-specific documents, or explicit style instructions, follow:
 https://github.com/jssechoi/agent-communication-guidelines
 
-Specifically, prioritize:
+Ordinary Q&A, progress updates, code explanations, comments, commits and reviews are excluded from this prose style. Credentials handling applies universally.
+
+For an applicable document, prioritize:
 1. Strictly avoid formal email-style greetings ("Hello", "This is...") and go straight to the core technical message.
 2. In inquiry replies, restate the user's intent before answering: "저희가 이해한 문의 의도: ...". Reports and operational guides use the purpose-specific structure in `references/document-rules.md` instead.
 3. Answering with "Yes/No/Confirmed" first, followed by short, dry, factual elaboration.
